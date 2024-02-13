@@ -1,3 +1,4 @@
 rootProject.name = 'restaurant-app'
 
 include(':customer-service')
+include(':order-service')
