@@ -1,10 +1,10 @@
-package com.jobayed.restaurant;
+package com.jobayed.customerservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RestaurantApplicationTests {
+class CustomerServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
