@@ -1,14 +1,16 @@
 package com.jobayed.customerservice.controller.endpoint;
 
-import com.jobayed.customerservice.exception.CustomerNotFoundException;
+import com.jobayed.customerservice.controller.model.request.CustomerRequest;
+import com.jobayed.customerservice.controller.model.response.CustomerResponse;
+import com.jobayed.customerservice.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 /**
  * Vantage Labs LLC.
@@ -18,17 +20,13 @@ import java.util.Optional;
 @RequestMapping("api/customer")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerController {
-    @GetMapping("/{id}")
-    public String getCustomer(@PathVariable("id") Long id) {
-        return Optional.ofNullable(getCustomerById(id))
-                .orElseThrow(CustomerNotFoundException::new);
-    }
-
-    String getCustomerById(Long id) {
-        if (id == 100) {
-            return "100";
-        }
-        return null;
+    private final CustomerService customerService;
+    @PostMapping
+    public ResponseEntity<CustomerResponse.Create> createCustomer(
+            @RequestBody @Validated CustomerRequest.Customer request) {
+        log.info("Creating customer with this request: {}",request);
+        return ResponseEntity.ok(customerService.create(request));
     }
 }
