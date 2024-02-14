@@ -1,6 +1,6 @@
 package com.jobayed.customerservice.controller.exceptionresolver;
 
-import com.jobayed.customerservice.controller.endpoint.CustomerController;
+import com.jobayed.customerservice.controller.endpoint.CustomerDpppController;
 import com.jobayed.customerservice.exception.BaseException;
 import com.jobayed.customerservice.exception.Error;
 import com.jobayed.customerservice.utility.Constants;
@@ -21,9 +21,9 @@ import org.springframework.web.util.WebUtils;
  * User: Jobayed Ullah
  * Time: 2/13/24 6:09 PM
  */
-@ControllerAdvice(assignableTypes = {CustomerController.class})
+@ControllerAdvice(assignableTypes = {CustomerDpppController.class})
 @Slf4j
-public class CustomerControllerExceptionResolver {
+public class CustomerDpppControllerExceptionResolver {
     @ExceptionHandler(value = {RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ResponseEntity<Object> handleRuntimeException(RuntimeException ex, WebRequest request) {
@@ -34,8 +34,9 @@ public class CustomerControllerExceptionResolver {
             error.setErrorCode(errCode);
             return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.OK, request);
         }
+
         Error error = Error.builder()
-                .errorCode(Constants.FeatureCode.CUSTOMER + ErrorCode.INTERNAL_SERVER_ERROR.getCode())
+                .errorCode(Constants.FeatureCode.CUSTOMER_DPPP + ErrorCode.INTERNAL_SERVER_ERROR.getCode())
                 .errorMessage(ErrorCode.INTERNAL_SERVER_ERROR.getMessage())
                 .build();
         return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);

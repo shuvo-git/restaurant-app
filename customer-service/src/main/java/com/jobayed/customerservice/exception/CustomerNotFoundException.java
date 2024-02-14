@@ -1,5 +1,7 @@
 package com.jobayed.customerservice.exception;
 
+import com.jobayed.customerservice.utility.ErrorCode;
+
 /**
  * Vantage Labs LLC.
  * User: Jobayed Ullah

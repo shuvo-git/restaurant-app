@@ -1,5 +1,6 @@
 package com.jobayed.customerservice.exception;
 
+import com.jobayed.customerservice.utility.ErrorCode;
 import lombok.Data;
 
 /**
@@ -9,18 +10,21 @@ import lombok.Data;
  */
 @Data
 public class BaseException extends RuntimeException {
-    String code;
-    String message;
+    private Error error;
 
     BaseException(String code, String message) {
         super(message);
-        this.code = code;
-        this.message = message;
+        this.error = Error.builder()
+                .errorCode(code)
+                .errorMessage(message)
+                .build();
     }
 
     BaseException(ErrorCode errorCode) {
-        super(errorCode.message);
-        this.code = errorCode.code;
-        this.message = errorCode.message;
+        super(errorCode.getMessage());
+        this.error = Error.builder()
+                .errorCode(errorCode.getCode())
+                .errorMessage(errorCode.getMessage())
+                .build();
     }
 }
