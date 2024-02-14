@@ -1,9 +1,10 @@
 package com.jobayed.customerservice.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 /**
  * Vantage Labs LLC.
@@ -14,9 +15,6 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "ADDRESS")
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AddressEntity extends BaseEntity {

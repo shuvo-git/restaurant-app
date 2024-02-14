@@ -1,13 +1,17 @@
 package com.jobayed.customerservice.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import lombok.*;
+import jakarta.persistence.Version;
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Version;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -19,11 +23,20 @@ import java.time.LocalDateTime;
 
 @Data
 @MappedSuperclass
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class BaseEntity {
+@EntityListeners(AuditingEntityListener.class)
+@FieldDefaults(level = AccessLevel.PROTECTED)
+public abstract class BaseEntity {
+    @CreatedBy
+    @Column(name = "CREATED_BY")
+    String createdBy;
+
     @CreatedDate
     @Column(name = "CREATED_AT")
     LocalDateTime createdAt;
+
+    @LastModifiedBy
+    @Column(name = "UPDATED_BY")
+    String updatedBy;
 
     @LastModifiedDate
     @Column(name = "UPDATED_AT")

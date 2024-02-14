@@ -23,10 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class CustomerController {
     private final CustomerService customerService;
+
     @PostMapping
     public ResponseEntity<CustomerResponse.Create> createCustomer(
             @RequestBody @Validated CustomerRequest.Customer request) {
-        log.info("Creating customer with this request: {}",request);
+        log.info("Creating customer with this request: {}", request);
         return ResponseEntity.ok(customerService.create(request));
     }
 }

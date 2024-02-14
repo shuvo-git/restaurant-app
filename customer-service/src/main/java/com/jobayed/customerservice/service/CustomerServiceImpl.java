@@ -7,8 +7,6 @@ import com.jobayed.customerservice.entity.CustomerEntity;
 import com.jobayed.customerservice.repository.AddressRepository;
 import com.jobayed.customerservice.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,19 +26,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public CustomerResponse.Create create(CustomerRequest.Customer request) {
-        AddressEntity addressEntity = AddressEntity.builder()
-                .location(request.getLocation())
-                .city(request.getCity())
-                .postCode(request.getPostCode())
-                .build();
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setLocation(request.getLocation());
+        addressEntity.setCity(request.getCity());
+        addressEntity.setPostCode(request.getPostCode());
         addressEntity = addressRepository.save(addressEntity);
 
-        CustomerEntity entity = CustomerEntity.builder()
-                .name(request.getName())
-                .phoneNumber(request.getPhoneNumber())
-                .status(request.getStatus())
-                .address(addressEntity)
-                .build();
+        CustomerEntity entity = new CustomerEntity();
+        entity.setName(request.getName());
+        entity.setPhoneNumber(request.getPhoneNumber());
+        entity.setStatus(request.getStatus());
+        entity.setAddress(addressEntity);
         repository.save(entity);
 
         return CustomerResponse.Create.builder().message("Customer successfully created!").build();

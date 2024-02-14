@@ -3,8 +3,8 @@ package com.jobayed.customerservice.entity;
 import com.jobayed.customerservice.enums.Status;
 import com.jobayed.customerservice.utility.StatusConverter;
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Vantage Labs LLC.
@@ -14,9 +14,6 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "CUSTOMER")
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CustomerEntity extends BaseEntity {
     @Id
