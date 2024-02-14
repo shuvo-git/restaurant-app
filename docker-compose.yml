@@ -1,0 +1,96 @@
+version: "3.8"
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    restart: unless-stopped
+    networks:
+      - restaurant-net
+
+  kafka-server:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-server:9092
+      #      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_LISTENERS: PLAINTEXT://kafka-server:9092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - restaurant-net
+
+
+  customer_service_postgres:
+    image: postgres:latest
+    container_name: customer_service_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres_a
+      POSTGRES_PASSWORD: postgres_a
+      POSTGRES_DB: postgres
+    #    expose:
+    #      - "54321"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - restaurant-net
+
+#  customer_service:
+#    build:
+#      context: .
+#      dockerfile: CustomerDockerfile
+#    container_name: customer-service-container
+#    restart: always
+#    depends_on:
+#      - customer_service_postgres
+#      - kafka-server
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://customer_service_postgres:5432/postgres
+##      ?currentSchema=acs
+#      SPRING_DATASOURCE_USERNAME: postgres_a
+#      SPRING_DATASOURCE_PASSWORD: postgres_a
+#      SPRING_KAFKA_BOOTSTRAP_SERVER: kafka-server:9092
+#    ports:
+#      - "9010:9010"
+#    networks:
+#      - restaurant-net
+
+#  customer_service:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile2
+#    container_name: customer_service_container
+#    restart: always
+#    depends_on:
+#      - kafka-server
+#    ports:
+#      - "9000:9000"
+#    environment:
+#      SPRING_KAFKA_BOOTSTRAP_SERVER: kafka-server:9092
+#    networks:
+#      - restaurant-net
+
+volumes:
+  postgres-data:
+#  account_service-data:
+
+networks:
+  restaurant-net:
+    driver: bridge
+

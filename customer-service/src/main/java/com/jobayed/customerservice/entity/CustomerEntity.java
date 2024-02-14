@@ -1,8 +1,10 @@
 package com.jobayed.customerservice.entity;
 
 import com.jobayed.customerservice.enums.Status;
+import com.jobayed.customerservice.utility.StatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Vantage Labs LLC.
@@ -35,10 +37,11 @@ public class CustomerEntity extends BaseEntity {
     @Column(name = "PHONE")
     String phoneNumber;
 
+    @Convert(converter = StatusConverter.class)
     @Column(name = "STATUS")
     Status status;
 
     @OneToOne
-    @JoinColumn(name ="ADDRESS_ID" , referencedColumnName = "ID")
+    @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
     AddressEntity address;
 }
