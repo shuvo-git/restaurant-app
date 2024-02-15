@@ -2,15 +2,14 @@ package com.jobayed.customerservice.controller.endpoint;
 
 import com.jobayed.customerservice.controller.model.request.CustomerRequest;
 import com.jobayed.customerservice.controller.model.response.CustomerResponse;
+import com.jobayed.customerservice.entity.dto.CustomerDto;
 import com.jobayed.customerservice.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Vantage Labs LLC.
@@ -29,5 +28,11 @@ public class CustomerController {
             @RequestBody @Validated CustomerRequest.Customer request) {
         log.info("Creating customer with this request: {}", request);
         return ResponseEntity.ok(customerService.create(request));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<CustomerDto>> getCustomerList(
+            @RequestParam Integer page, @RequestParam Integer pageSize) {
+        return ResponseEntity.ok(customerService.getCustomers(page, pageSize));
     }
 }

@@ -15,5 +15,4 @@ public interface CustomerResponse {
     class Create {
         String message;
     }
-
 }

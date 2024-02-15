@@ -4,7 +4,7 @@ plugins {
 	id 'io.spring.dependency-management'
 }
 
-group = 'com.jobayed.orderservice'
+group = 'com.jobayed.foodservice'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -13,7 +13,7 @@ java {
 
 bootJar {
 	enabled = true
-	archiveFileName = 'order-service.jar'
+	archiveFileName = 'food-service.jar'
 }
 
 dependencies {

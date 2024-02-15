@@ -4,11 +4,14 @@ import com.jobayed.customerservice.controller.model.request.CustomerRequest;
 import com.jobayed.customerservice.controller.model.response.CustomerResponse;
 import com.jobayed.customerservice.entity.AddressEntity;
 import com.jobayed.customerservice.entity.CustomerEntity;
+import com.jobayed.customerservice.entity.dto.CustomerDto;
 import com.jobayed.customerservice.repository.AddressRepository;
 import com.jobayed.customerservice.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,7 +23,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
-    private final CustomerRepository repository;
+    private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
 
     @Override
@@ -37,8 +40,14 @@ public class CustomerServiceImpl implements CustomerService {
         entity.setPhoneNumber(request.getPhoneNumber());
         entity.setStatus(request.getStatus());
         entity.setAddress(addressEntity);
-        repository.save(entity);
+        customerRepository.save(entity);
 
         return CustomerResponse.Create.builder().message("Customer successfully created!").build();
+    }
+
+    @Override
+    public Page<CustomerDto> getCustomers(Integer page, Integer pageSize) {
+        PageRequest pageable = PageRequest.of(page, pageSize);
+        return customerRepository.getCustomerList(pageable);
     }
 }
