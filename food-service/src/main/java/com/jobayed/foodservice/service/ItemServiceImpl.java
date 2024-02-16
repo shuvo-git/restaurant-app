@@ -21,7 +21,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemResponse.Add addItem(ItemRequest.Add request) {
-        ItemEntity item =  ItemEntity.builder()
+        ItemEntity item = ItemEntity.builder()
                 .name(request.getName())
                 .price(request.getPrice())
                 .status(request.getStatus())

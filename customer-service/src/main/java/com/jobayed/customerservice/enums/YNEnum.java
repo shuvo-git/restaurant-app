@@ -7,5 +7,5 @@ package com.jobayed.customerservice.enums;
  */
 
 public enum YNEnum {
-    N,Y
+    N, Y
 }

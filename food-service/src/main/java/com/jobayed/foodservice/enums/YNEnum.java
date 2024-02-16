@@ -7,5 +7,5 @@ package com.jobayed.foodservice.enums;
  */
 
 public enum YNEnum {
-    N,Y
+    N, Y
 }

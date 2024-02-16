@@ -1,7 +1,7 @@
 package com.jobayed.foodservice.entity;
 
-import com.jobayed.foodservice.utility.StatusConverter;
 import com.jobayed.foodservice.enums.Status;
+import com.jobayed.foodservice.utility.StatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
 

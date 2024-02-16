@@ -12,11 +12,18 @@ import java.time.LocalDateTime;
 
 public interface CustomerDto {
     String getId();
+
     String getName();
+
     String getPhoneNumber();
+
     Status getStatus();
+
     String getLocation();
+
     String getCity();
+
     String getPostCode();
+
     LocalDateTime getCreatedAt();
 }
