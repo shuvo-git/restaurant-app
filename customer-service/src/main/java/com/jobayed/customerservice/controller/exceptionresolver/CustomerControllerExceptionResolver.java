@@ -30,7 +30,7 @@ public class CustomerControllerExceptionResolver {
         if (ex instanceof BaseException bex) {
 
             Error error = bex.getError();
-            String errCode = Constants.FeatureCode.CUSTOMER_DPPP + error.getErrorCode();
+            String errCode = Constants.FeatureCode.CUSTOMER + error.getErrorCode();
             error.setErrorCode(errCode);
             return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.OK, request);
         }

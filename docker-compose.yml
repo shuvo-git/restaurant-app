@@ -22,7 +22,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_CREATE_TOPICS: "food:1:1,order:1:1,customer:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-server:9092
@@ -34,63 +34,126 @@ services:
       - restaurant-net
 
 
-  customer_service_postgres:
+
+  customer-db:
     image: postgres:latest
-    container_name: customer_service_postgres
+    container_name: customer-db
     restart: always
     environment:
-      POSTGRES_USER: postgres_a
-      POSTGRES_PASSWORD: postgres_a
-      POSTGRES_DB: postgres
+      POSTGRES_USER: customer_a
+      POSTGRES_PASSWORD: customer_a
+      POSTGRES_DB: customer
 
     ports:
-      - "15432:15432"
+      - "5433:5433"
     expose:
-      - "15432"
+      - "5433"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    command: -p 15432
+    command: -p 5433
+    networks:
+      - restaurant-net
+  food-db:
+    image: postgres:latest
+    container_name: food-db
+    restart: always
+    environment:
+      POSTGRES_USER: food_a
+      POSTGRES_PASSWORD: food_a
+      POSTGRES_DB: food
+
+    ports:
+      - "5434:5434"
+    expose:
+      - "5434"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data_food
+    command: -p 5434
     networks:
       - restaurant-net
 
-#  customer_service:
-#    build:
-#      context: .
-#      dockerfile: CustomerDockerfile
-#    container_name: customer-service-container
-#    restart: always
-#    depends_on:
-#      - customer_service_postgres
-#      - kafka-server
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://customer_service_postgres:5432/postgres
-##      ?currentSchema=acs
-#      SPRING_DATASOURCE_USERNAME: postgres_a
-#      SPRING_DATASOURCE_PASSWORD: postgres_a
-#      SPRING_KAFKA_BOOTSTRAP_SERVER: kafka-server:9092
-#    ports:
-#      - "9010:9010"
-#    networks:
-#      - restaurant-net
+  order-db:
+    image: postgres:latest
+    container_name: order-db
+    restart: always
+    environment:
+      POSTGRES_USER: order_a
+      POSTGRES_PASSWORD: order_a
+      POSTGRES_DB: order
 
-#  customer_service:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile2
-#    container_name: customer_service_container
-#    restart: always
-#    depends_on:
-#      - kafka-server
-#    ports:
-#      - "9000:9000"
-#    environment:
-#      SPRING_KAFKA_BOOTSTRAP_SERVER: kafka-server:9092
-#    networks:
-#      - restaurant-net
+    ports:
+      - "5435:5435"
+    expose:
+      - "5435"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data_order
+    command: -p 5435
+    networks:
+      - restaurant-net
+
+  customer-service:
+    build:
+      context: customer-service
+      dockerfile: CustomerDockerfile
+    container_name: customer-service-container
+    restart: always
+    depends_on:
+      - customer-db
+      - kafka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-db:5433/customer
+      SPRING_DATASOURCE_USERNAME: customer_a
+      SPRING_DATASOURCE_PASSWORD: customer_a
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_KAFKA_BOOTSTRAP_SERVER: kafka-server:9092
+    ports:
+      - "8010:8010"
+    networks:
+      - restaurant-net
+
+
+  food-service:
+    build:
+      context: food-service
+      dockerfile: FoodDockerfile
+    container_name: food-service-container
+    restart: always
+    depends_on:
+      - food-db
+      - kafka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://food-db:5434/food
+      SPRING_DATASOURCE_USERNAME: food_a
+      SPRING_DATASOURCE_PASSWORD: food_a
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_KAFKA_BOOTSTRAP_SERVER: kafka-server:9092
+    ports:
+      - "8011:8011"
+    networks:
+      - restaurant-net
+
+  order-service:
+    build:
+      context: order-service
+      dockerfile: OrderDockerfile
+    container_name: order-service-container
+    restart: always
+    depends_on:
+      - order-db
+      - kafka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://order-db:5435/order
+      SPRING_DATASOURCE_USERNAME: order_a
+      SPRING_DATASOURCE_PASSWORD: order_a
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_KAFKA_BOOTSTRAP_SERVER: kafka-server:9092
+    ports:
+      - "8012:8012"
+    networks:
+      - restaurant-net
 
 volumes:
   postgres-data:
-#  account_service-data:
 
 networks:
   restaurant-net:

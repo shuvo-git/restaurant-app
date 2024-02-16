@@ -4,9 +4,11 @@ import com.jobayed.customerservice.controller.model.request.CustomerRequest;
 import com.jobayed.customerservice.controller.model.response.CustomerResponse;
 import com.jobayed.customerservice.entity.AddressEntity;
 import com.jobayed.customerservice.entity.CustomerEntity;
+import com.jobayed.customerservice.entity.dto.Customer;
 import com.jobayed.customerservice.entity.dto.CustomerDto;
 import com.jobayed.customerservice.repository.AddressRepository;
 import com.jobayed.customerservice.repository.CustomerRepository;
+import com.jobayed.customerservice.utility.Constants;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     @Override
     @Transactional
@@ -42,6 +45,8 @@ public class CustomerServiceImpl implements CustomerService {
         entity.setAddress(addressEntity);
         customerRepository.save(entity);
 
+        this.publishToTopic(entity);
+
         return CustomerResponse.Create.builder().message("Customer successfully created!").build();
     }
 
@@ -49,5 +54,25 @@ public class CustomerServiceImpl implements CustomerService {
     public Page<CustomerDto> getCustomers(Integer page, Integer pageSize) {
         PageRequest pageable = PageRequest.of(page, pageSize);
         return customerRepository.getCustomerList(pageable);
+    }
+
+    private void publishToTopic(CustomerEntity entity) {
+        Customer customer = Customer.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .status(entity.getStatus())
+                .build();
+
+        customer.setCreatedAt(entity.getCreatedAt());
+        customer.setUpdatedAt(entity.getUpdatedAt());
+        customer.setCreatedBy(entity.getCreatedBy());
+        customer.setUpdatedBy(entity.getUpdatedBy());
+        customer.setVersion(entity.getVersion());
+
+        kafkaProducerService.sendToKafka(
+                Constants.Topic.CUSTOMER,
+                Constants.Topic.Key.CUSTOMER,
+                customer
+        );
     }
 }

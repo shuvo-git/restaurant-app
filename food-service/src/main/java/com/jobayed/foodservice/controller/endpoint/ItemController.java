@@ -1,6 +1,7 @@
 package com.jobayed.foodservice.controller.endpoint;
 
-import com.jobayed.foodservice.controller.model.request.OrderRequest;
+import com.jobayed.foodservice.controller.model.request.ItemRequest;
+import com.jobayed.foodservice.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
  * User: Jobayed Ullah
  * Time: 2/13/24 5:52 PM
  */
-@RequestMapping("api/order")
+@RequestMapping("api/item")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class OrdererController {
-
+public class ItemController {
+    private final ItemService itemService;
     @PostMapping
-    public ResponseEntity<?> createCustomer(
-            @RequestBody @Validated OrderRequest.Order request) {
-        log.info("Creating customer with this request: {}", request);
-        // return ResponseEntity.ok(customerService.create(request));
-        return null;
+    public ResponseEntity<?> createItem(
+            @RequestBody @Validated ItemRequest.Add request) {
+        log.info("Creating Item with this request: {}", request);
+        return ResponseEntity.ok(itemService.addItem(request));
     }
 
 //    @GetMapping

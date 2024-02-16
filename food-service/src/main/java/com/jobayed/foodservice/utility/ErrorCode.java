@@ -13,7 +13,7 @@ import java.util.Map;
  */
 
 public enum ErrorCode {
-    CUSTOMER_NOT_FOUND("001", "Customer not found"),
+    FOOD_NOT_FOUND("001", "Food not found"),
     INTERNAL_SERVER_ERROR("500", "Internal server error");
 
     @Getter

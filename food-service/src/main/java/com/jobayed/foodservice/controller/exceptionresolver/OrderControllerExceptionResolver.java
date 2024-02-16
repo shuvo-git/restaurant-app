@@ -4,7 +4,7 @@ import com.jobayed.foodservice.exception.BaseException;
 import com.jobayed.foodservice.exception.Error;
 import com.jobayed.foodservice.utility.Constants;
 import com.jobayed.foodservice.utility.ErrorCode;
-import com.jobayed.foodservice.controller.endpoint.OrdererController;
+import com.jobayed.foodservice.controller.endpoint.ItemController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import org.springframework.web.util.WebUtils;
  * User: Jobayed Ullah
  * Time: 2/13/24 6:09 PM
  */
-@ControllerAdvice(assignableTypes = {OrdererController.class})
+@ControllerAdvice(assignableTypes = {ItemController.class})
 @Slf4j
 public class OrderControllerExceptionResolver {
     @ExceptionHandler(value = {RuntimeException.class})

@@ -1,6 +1,6 @@
 package com.jobayed.orderservice.exception;
 
-import com.jobayed.customerservice.utility.ErrorCode;
+import com.jobayed.orderservice.utility.ErrorCode;
 
 /**
  * Vantage Labs LLC.

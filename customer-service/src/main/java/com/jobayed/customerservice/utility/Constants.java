@@ -9,6 +9,13 @@ package com.jobayed.customerservice.utility;
 public class Constants {
     public static class FeatureCode {
         public static final String CUSTOMER = "001";
-        public static final String CUSTOMER_DPPP = "002";
+    }
+
+    public class Topic {
+        public static final String CUSTOMER = "customer";
+
+        public class Key {
+            public static final String CUSTOMER = "customer_";
+        }
     }
 }
