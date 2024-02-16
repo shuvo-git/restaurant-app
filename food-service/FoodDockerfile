@@ -1,0 +1,4 @@
+FROM openjdk:17-alpine
+ARG JAR_FILE=build/libs/food-service.jar
+COPY $JAR_FILE food-service.jar
+ENTRYPOINT ["java", "-jar", "food-service.jar"]
