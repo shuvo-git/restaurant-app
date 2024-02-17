@@ -8,7 +8,7 @@ package com.jobayed.foodservice.utility;
 
 public class Constants {
     public static class FeatureCode {
-        public static final String ORDER = "001";
+        public static final String ITEM = "001";
     }
 
     public class Topic {

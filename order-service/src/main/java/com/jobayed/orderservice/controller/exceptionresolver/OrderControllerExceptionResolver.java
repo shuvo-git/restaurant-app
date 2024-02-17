@@ -34,13 +34,13 @@ public class OrderControllerExceptionResolver {
     protected ResponseEntity<Object> handleRuntimeException(RuntimeException ex, WebRequest request) {
         if (ex instanceof BaseException bex) {
             Error error = bex.getError();
-            String errCode = properties.getCode() +
-                    Constants.FeatureCode.ORDER + error.getErrorCode();
-            error.setErrorCode(errCode);
+            error.setErrorCode(this.buildErrorCode(error.getErrorCode()));
             return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.OK, request);
         }
+
+        String errCode = this.buildErrorCode(ErrorCode.INTERNAL_SERVER_ERROR.getCode());
         Error error = Error.builder()
-                .errorCode(Constants.FeatureCode.ORDER + ErrorCode.INTERNAL_SERVER_ERROR.getCode())
+                .errorCode(errCode)
                 .errorMessage(ErrorCode.INTERNAL_SERVER_ERROR.getMessage())
                 .build();
         return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
@@ -53,5 +53,14 @@ public class OrderControllerExceptionResolver {
             request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
         }
         return new ResponseEntity<>(body, headers, status);
+    }
+
+    private String buildErrorCode(final String errorCode) {
+        return new StringBuilder().append(properties.getCode())
+                .append('_')
+                .append(Constants.FeatureCode.ORDER)
+                .append('_')
+                .append(errorCode)
+                .toString();
     }
 }
