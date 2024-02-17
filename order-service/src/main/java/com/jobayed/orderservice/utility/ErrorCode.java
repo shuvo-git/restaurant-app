@@ -14,6 +14,8 @@ import java.util.Map;
 
 public enum ErrorCode {
     CUSTOMER_NOT_FOUND("001", "Customer not found"),
+    ITEM_NOT_FOUND("002", "Item not found"),
+    ITEM_NOT_AVAILABLE("003", "Item not available"),
     INTERNAL_SERVER_ERROR("500", "Internal server error");
 
     @Getter

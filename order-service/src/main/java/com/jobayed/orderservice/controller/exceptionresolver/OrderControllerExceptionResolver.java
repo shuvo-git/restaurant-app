@@ -1,10 +1,12 @@
 package com.jobayed.orderservice.controller.exceptionresolver;
 
-import com.jobayed.orderservice.controller.endpoint.OrdererController;
+import com.jobayed.orderservice.config.AppProperties;
+import com.jobayed.orderservice.controller.endpoint.OrderController;
 import com.jobayed.orderservice.exception.BaseException;
 import com.jobayed.orderservice.exception.Error;
 import com.jobayed.orderservice.utility.Constants;
 import com.jobayed.orderservice.utility.ErrorCode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,15 +23,19 @@ import org.springframework.web.util.WebUtils;
  * User: Jobayed Ullah
  * Time: 2/13/24 6:09 PM
  */
-@ControllerAdvice(assignableTypes = {OrdererController.class})
+@ControllerAdvice(assignableTypes = {OrderController.class})
 @Slf4j
+@RequiredArgsConstructor
 public class OrderControllerExceptionResolver {
+    private final AppProperties properties;
+
     @ExceptionHandler(value = {RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ResponseEntity<Object> handleRuntimeException(RuntimeException ex, WebRequest request) {
         if (ex instanceof BaseException bex) {
             Error error = bex.getError();
-            String errCode = Constants.FeatureCode.ORDER + error.getErrorCode();
+            String errCode = properties.getCode() +
+                    Constants.FeatureCode.ORDER + error.getErrorCode();
             error.setErrorCode(errCode);
             return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.OK, request);
         }

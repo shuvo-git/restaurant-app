@@ -5,6 +5,8 @@ import com.jobayed.orderservice.utility.StatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * Vantage Labs LLC.
  * User: Jobayed Ullah
@@ -27,4 +29,7 @@ public class CustomerEntity extends BaseEntity {
     @Convert(converter = StatusConverter.class)
     @Column(name = "STATUS")
     Status status;
+
+    @OneToMany(mappedBy = "id")
+    private List<OrderEntity> orders;
 }

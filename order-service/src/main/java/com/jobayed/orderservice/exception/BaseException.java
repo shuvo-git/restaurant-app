@@ -3,6 +3,7 @@ package com.jobayed.orderservice.exception;
 
 import com.jobayed.orderservice.utility.ErrorCode;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Vantage Labs LLC.
@@ -10,6 +11,7 @@ import lombok.Data;
  * Time: 2/13/24 5:31 PM
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BaseException extends RuntimeException {
     private Error error;
 

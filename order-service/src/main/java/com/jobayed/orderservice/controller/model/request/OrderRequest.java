@@ -2,6 +2,9 @@ package com.jobayed.orderservice.controller.model.request;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Vantage Labs LLC.
  * User: Jobayed Ullah
@@ -12,5 +15,12 @@ public interface OrderRequest {
     @Data
     class Order {
         Long customerId;
+        List<OrderItem> items = new ArrayList<>();
+    }
+
+    @Data
+    class OrderItem {
+        Long itemId;
+        Integer quantity;
     }
 }

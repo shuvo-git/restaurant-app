@@ -1,6 +1,9 @@
 package com.jobayed.orderservice.controller.endpoint;
 
 import com.jobayed.orderservice.controller.model.request.OrderRequest;
+import com.jobayed.orderservice.service.CustomerService;
+import com.jobayed.orderservice.service.OrderService;
+import jdk.jshell.JShell;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class OrdererController {
+public class OrderController {
+    private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<?> createCustomer(
-            @RequestBody @Validated OrderRequest.Order request) {
-        log.info("Creating customer with this request: {}", request);
-        // return ResponseEntity.ok(customerService.create(request));
-        return null;
+    public ResponseEntity<?> createOrder(@RequestBody @Validated OrderRequest.Order request) {
+        log.info("Creating Order with this request: {}", request);
+        return ResponseEntity.ok(orderService.createOrder(request));
     }
 
 //    @GetMapping
