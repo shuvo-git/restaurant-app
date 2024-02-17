@@ -13,8 +13,8 @@ import java.util.Map;
  */
 
 public enum OrderStatus {
-    ACTIVE("PENDING", 21),
-    INACTIVE("WAIT_FOR_PAYMENT", 22),
+    PENDING("PENDING", 21),
+    WAIT_FOR_PAYMENT("WAIT_FOR_PAYMENT", 22),
     PLACED("PLACED", 23),
     REJECTED("REJECTED", 24);
 

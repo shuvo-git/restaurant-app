@@ -19,7 +19,7 @@ public interface OrderRequest {
     }
 
     @Data
-    class OrderItem {
+    public class OrderItem {
         Long itemId;
         Integer quantity;
     }

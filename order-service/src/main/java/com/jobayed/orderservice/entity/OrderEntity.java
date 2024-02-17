@@ -3,8 +3,9 @@ package com.jobayed.orderservice.entity;
 import com.jobayed.orderservice.enums.OrderStatus;
 import com.jobayed.orderservice.utility.OrderStatusConverter;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+
+import java.util.List;
 
 /**
  * Vantage Labs LLC.
@@ -14,6 +15,9 @@ import lombok.EqualsAndHashCode;
 @Table(name = "ORDERS")
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class OrderEntity extends BaseEntity {
     @Id
@@ -28,13 +32,18 @@ public class OrderEntity extends BaseEntity {
     )
     Long id;
 
+    @Column(name = "order_id", nullable = false)
+    String orderId;
+
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID")
-    CustomerEntity customerId;
+    CustomerEntity customer;
 
     @Convert(converter = OrderStatusConverter.class)
     @Column(name = "STATUS")
     OrderStatus orderStatus;
 
+    @OneToMany(mappedBy = "id")
+    private List<OrderItemEntity> orderItems;
 
 }

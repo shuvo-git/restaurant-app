@@ -13,9 +13,20 @@ public class Constants {
 
     public class Topic {
         public static final String CUSTOMER = "customer";
+        public static final String ORDER = "order";
+
+        public class Key {
+            public static final String ORDER = "order_";
+        }
 
         public class Group {
             public static final String CUSTOMER = "customer_Group";
+        }
+    }
+
+    public class OrderState {
+        public class Message {
+            public static final String PENDING = "Your order is being processed.";
         }
     }
 }
