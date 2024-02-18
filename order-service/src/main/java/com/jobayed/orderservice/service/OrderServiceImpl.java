@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -96,6 +97,11 @@ public class OrderServiceImpl implements OrderService {
         Page<OrderResponse.OrderSummary> orders = orderRepository.findOrdersByCurrentDate(pageable);
         log.info("Orders {}", orders);
         return orders;
+    }
+
+    @Override
+    public Optional<OrderEntity> findById(Long id) {
+        return orderRepository.findById(id);
     }
 
     protected List<OrderItemEntity> toOrderItemEntityList(List<Long> orderIds,

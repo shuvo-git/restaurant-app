@@ -21,6 +21,7 @@ public class Constants {
 
         public class Group {
             public static final String CUSTOMER = "customer_Group";
+            public static final String ORDER = "orders_Group";
         }
     }
 

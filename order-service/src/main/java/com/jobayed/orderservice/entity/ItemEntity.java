@@ -1,7 +1,7 @@
 package com.jobayed.orderservice.entity;
 
 import com.jobayed.orderservice.enums.Status;
-import com.jobayed.orderservice.utility.StatusConverter;
+import com.jobayed.orderservice.utility.converter.StatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
 

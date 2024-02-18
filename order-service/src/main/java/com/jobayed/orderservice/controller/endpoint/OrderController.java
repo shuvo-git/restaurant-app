@@ -40,6 +40,6 @@ public class OrderController {
     public ResponseEntity<Page<OrderResponse.OrderSummary>> getOrderListByCurrentDate(
             @RequestParam Integer page,
             @RequestParam Integer pageSize) {
-        return ResponseEntity.ok(orderService.getOrdersByCurrentDate( page, pageSize));
+        return ResponseEntity.ok(orderService.getOrdersByCurrentDate(page, pageSize));
     }
 }

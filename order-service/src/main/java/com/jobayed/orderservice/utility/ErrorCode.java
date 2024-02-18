@@ -16,6 +16,7 @@ public enum ErrorCode {
     CUSTOMER_NOT_FOUND("001", "Customer not found"),
     ITEM_NOT_FOUND("002", "Item not found"),
     ITEM_NOT_AVAILABLE("003", "Item not available"),
+    ORDER_NOT_FOUND("004", "Order not found"),
     INTERNAL_SERVER_ERROR("500", "Internal server error");
 
     @Getter

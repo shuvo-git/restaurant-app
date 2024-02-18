@@ -34,6 +34,6 @@ public class OrderItemEntity extends BaseEntity {
     @Column(name = "quantity", nullable = false)
     Integer quantity;
 
-    @Column(name = "total_price", nullable = false)
+    @Column(name = "total_price", nullable = true)
     double totalPrice = 0;
 }
