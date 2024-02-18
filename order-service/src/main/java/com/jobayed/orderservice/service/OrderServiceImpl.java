@@ -90,6 +90,13 @@ public class OrderServiceImpl implements OrderService {
         return orders;
     }
 
+    @Override
+    public Page<OrderResponse.OrderSummary> getOrdersByCurrentDate(Integer page, Integer pageSize) {
+        PageRequest pageable = PageRequest.of(page, pageSize);
+        Page<OrderResponse.OrderSummary> orders = orderRepository.findOrdersByCurrentDate(pageable);
+        log.info("Orders {}", orders);
+        return orders;
+    }
 
     protected List<OrderItemEntity> toOrderItemEntityList(List<Long> orderIds,
                                                           OrderEntity order,

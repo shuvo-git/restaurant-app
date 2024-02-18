@@ -5,8 +5,6 @@ import com.jobayed.orderservice.utility.OrderStatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Table(name = "ORDER_LOG")
 @Entity
 @Data
@@ -14,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class OrderLogEntity extends BaseEntity{
+public class OrderLogEntity extends BaseEntity {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,

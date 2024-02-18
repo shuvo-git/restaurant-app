@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  * Time: 2/13/24 5:31 PM
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class BaseException extends RuntimeException {
     private Error error;
 

@@ -2,10 +2,7 @@ package com.jobayed.orderservice.controller.endpoint;
 
 import com.jobayed.orderservice.controller.model.request.OrderRequest;
 import com.jobayed.orderservice.controller.model.response.OrderResponse;
-import com.jobayed.orderservice.entity.OrderEntity;
-import com.jobayed.orderservice.service.CustomerService;
 import com.jobayed.orderservice.service.OrderService;
-import jdk.jshell.JShell;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,10 +29,17 @@ public class OrderController {
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Page<OrderResponse.OrderSummary>> getCustomerList(
-            @PathVariable("customerId")Long customerId,
+    public ResponseEntity<Page<OrderResponse.OrderSummary>> getOrderListByCustomerId(
+            @PathVariable("customerId") Long customerId,
             @RequestParam Integer page,
             @RequestParam Integer pageSize) {
         return ResponseEntity.ok(orderService.getOrdersByCustomerId(customerId, page, pageSize));
+    }
+
+    @GetMapping("/today")
+    public ResponseEntity<Page<OrderResponse.OrderSummary>> getOrderListByCurrentDate(
+            @RequestParam Integer page,
+            @RequestParam Integer pageSize) {
+        return ResponseEntity.ok(orderService.getOrdersByCurrentDate( page, pageSize));
     }
 }

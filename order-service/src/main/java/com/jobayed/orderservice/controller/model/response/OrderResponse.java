@@ -29,9 +29,13 @@ public interface OrderResponse {
 
     interface OrderSummary {
         String getOrderId();
+
         String getCustomerId();
+
         String getCustomerName();
+
         OrderStatus getOrderStatus();
+
         LocalDateTime getOrderedAt();
     }
 }
