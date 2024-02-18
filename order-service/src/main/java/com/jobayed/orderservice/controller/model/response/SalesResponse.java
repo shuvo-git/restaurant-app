@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface SalesResponse {
@@ -13,7 +14,7 @@ public interface SalesResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     class TotalSales {
-        LocalDateTime currentDate;
+        LocalDate currentDate;
         double amount;
     }
 }
