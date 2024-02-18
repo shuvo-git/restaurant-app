@@ -5,6 +5,7 @@ import com.jobayed.orderservice.entity.OrderItemEntity;
 import com.jobayed.orderservice.entity.SalesEntity;
 import com.jobayed.orderservice.entity.dto.Order;
 import com.jobayed.orderservice.enums.BillStatus;
+import com.jobayed.orderservice.enums.OrderStatus;
 import com.jobayed.orderservice.exception.OrderNotFoundException;
 import com.jobayed.orderservice.repository.SalesRepository;
 import com.jobayed.orderservice.utility.Constants;
@@ -23,6 +24,7 @@ public class SalesServiceImpl implements SalesService {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
     private final SalesRepository salesRepository;
+    private final OrderLogService orderLogService;
 
     @Transactional
     @KafkaListener(groupId = Constants.Topic.Group.ORDER, topics = Constants.Topic.ORDER)
@@ -39,6 +41,15 @@ public class SalesServiceImpl implements SalesService {
             double totalBill = orderItems.stream()
                     .map(OrderItemEntity::getTotalPrice)
                     .reduce(0.0, Double::sum);
+
+            orderEntity.setOrderStatus(OrderStatus.WAIT_FOR_PAYMENT);
+            orderLogService.addOrderLog(
+                    orderEntity,
+                    OrderStatus.WAIT_FOR_PAYMENT,
+                    "Changed order status from " + OrderStatus.PENDING.getName() + " to " +
+                            OrderStatus.WAIT_FOR_PAYMENT.getName() + " status"
+            );
+
 
             salesRepository.save(SalesEntity.builder()
                     .order(orderEntity)
