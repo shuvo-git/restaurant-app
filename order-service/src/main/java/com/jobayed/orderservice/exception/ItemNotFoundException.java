@@ -10,7 +10,7 @@ import com.jobayed.orderservice.utility.ErrorCode;
 
 public class ItemNotFoundException extends BaseException {
     public ItemNotFoundException() {
-        super(ErrorCode.CUSTOMER_NOT_FOUND);
+        super(ErrorCode.ITEM_NOT_FOUND);
     }
 
     public ItemNotFoundException(String code, String message) {

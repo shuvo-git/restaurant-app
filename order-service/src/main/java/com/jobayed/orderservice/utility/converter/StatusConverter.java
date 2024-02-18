@@ -1,4 +1,4 @@
-package com.jobayed.orderservice.utility;
+package com.jobayed.orderservice.utility.converter;
 
 import com.jobayed.orderservice.enums.Status;
 import jakarta.persistence.AttributeConverter;

@@ -2,7 +2,7 @@ package com.jobayed.orderservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jobayed.orderservice.enums.OrderStatus;
-import com.jobayed.orderservice.utility.OrderStatusConverter;
+import com.jobayed.orderservice.utility.converter.OrderStatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -52,4 +52,8 @@ public class OrderEntity extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "id")
     private List<OrderLogEntity> orderLogs;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id")
+    private List<SalesEntity> sales;
 }
