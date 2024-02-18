@@ -8,6 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -22,5 +26,12 @@ public class ItemServiceImpl implements ItemService {
         if (item != null) {
             itemRepository.save(item);
         }
+    }
+
+    @Override
+    public Map<Long, ItemEntity> findItemsByIds(List<Long> ids) {
+        List<ItemEntity> items = itemRepository.findAllById(ids);
+        return items.stream()
+                .collect(Collectors.toMap(ItemEntity::getId, item -> item));
     }
 }
