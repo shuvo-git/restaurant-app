@@ -5,5 +5,6 @@ import com.jobayed.orderservice.entity.dto.Order;
 
 public interface SalesService {
     void prepareOrderBill(Order order);
-    SalesResponse.TotalSales getTotalSalesByCurrentDate(Order order);
+
+    SalesResponse.TotalSales getTotalSalesByCurrentDate();
 }

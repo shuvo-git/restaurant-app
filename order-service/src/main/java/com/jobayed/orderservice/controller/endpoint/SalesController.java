@@ -1,16 +1,13 @@
 package com.jobayed.orderservice.controller.endpoint;
 
-import com.jobayed.orderservice.controller.model.request.OrderRequest;
-import com.jobayed.orderservice.controller.model.response.OrderResponse;
 import com.jobayed.orderservice.controller.model.response.SalesResponse;
-import com.jobayed.orderservice.service.OrderService;
 import com.jobayed.orderservice.service.SalesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Vantage Labs LLC.
@@ -33,11 +30,8 @@ public class SalesController {
 //    }
 
     @GetMapping("/today")
-    public ResponseEntity<SalesResponse.TotalSales> getOrderListByCurrentDate(
-            @RequestParam Integer page,
-            @RequestParam Integer pageSize) {
-//        return ResponseEntity.ok(orderService.getOrdersByCurrentDate(page, pageSize));
-        return null;
+    public ResponseEntity<SalesResponse.TotalSales> getOrderListByCurrentDate() {
+        return ResponseEntity.ok(salesService.getTotalSalesByCurrentDate());
     }
 
 }

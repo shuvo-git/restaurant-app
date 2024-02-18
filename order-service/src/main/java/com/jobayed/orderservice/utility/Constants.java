@@ -9,6 +9,7 @@ package com.jobayed.orderservice.utility;
 public class Constants {
     public static class FeatureCode {
         public static final String ORDER = "001";
+        public static final String SALES = "002";
     }
 
     public class Topic {
