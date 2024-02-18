@@ -28,6 +28,10 @@ public class OrderItemEntity extends BaseEntity{
     Long id;
 
     @ManyToOne
+    @JoinColumn(name = "order_id")
+    OrderEntity order ;
+
+    @ManyToOne
     @JoinColumn(name = "item_id")
     ItemEntity item ;
 

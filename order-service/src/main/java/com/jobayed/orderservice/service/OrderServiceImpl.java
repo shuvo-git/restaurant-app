@@ -42,23 +42,27 @@ public class OrderServiceImpl implements OrderService {
         CustomerEntity customer = customerService.findCustomerById(request.getCustomerId())
                 .orElseThrow(CustomerNotFoundException::new);
 
-        List<Long> orderIds = request.getItems().stream()
+        List<Long> orderItemIds = request.getItems().stream()
                 .map(OrderRequest.OrderItem::getItemId)
                 .collect(Collectors.toList());
-
-        List<OrderItemEntity> orderItemEntities = this.toOrderItemEntityList(orderIds, request.getItems());
-        orderItemEntities = orderItemRepository.saveAll(orderItemEntities);
 
         OrderEntity orderEntity = OrderEntity.builder()
                 .customer(customer)
                 .orderId(Utils.orderUniqueIdGenerator())
                 .orderStatus(OrderStatus.PENDING)
-                .orderItems(orderItemEntities)
                 .build();
         orderRepository.save(orderEntity);
 
+        List<OrderItemEntity> orderItemEntities = this.toOrderItemEntityList(
+                orderItemIds,
+                orderEntity,
+                request.getItems()
+        );
+        orderItemEntities = orderItemRepository.saveAll(orderItemEntities);
+        orderEntity.setOrderItems(orderItemEntities);
+
         orderLogService.addOrderLog(orderEntity, OrderStatus.PENDING,
-                "Order created in "+OrderStatus.PENDING.getName()+" state");
+                "Order created in " + OrderStatus.PENDING.getName() + " state");
         publishOrder(Order.builder().orderId(orderEntity.getId()).build());
 
         return OrderResponse.Pending.builder()
@@ -69,18 +73,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void publishOrder(Order order) {
-        kafkaProducerService.sendToKafka(Constants.Topic.ORDER,Constants.Topic.Key.ORDER, order);
+        kafkaProducerService.sendToKafka(Constants.Topic.ORDER, Constants.Topic.Key.ORDER, order);
     }
 
 
     protected List<OrderItemEntity> toOrderItemEntityList(List<Long> orderIds,
-        List<OrderRequest.OrderItem> orderItemRequest) {
+                                                          OrderEntity order,
+                                                          List<OrderRequest.OrderItem> orderItemRequest) {
         Map<Long, ItemEntity> itemMap = itemService.findItemsByIds(orderIds);
         // TODO: check if found item size and req item size is equal
 
         return orderItemRequest.stream()
                 .filter(item -> itemMap.containsKey(item.getItemId()))
                 .map(item -> OrderItemEntity.builder()
+                        .order(order)
                         .item(itemMap.get(item.getItemId()))
                         .quantity(item.getQuantity())
                         .build()
