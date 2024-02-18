@@ -68,7 +68,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-
     protected List<OrderItemEntity> toOrderItemEntityList(List<Long> orderIds, List<OrderRequest.OrderItem> orderItemRequest) {
         Map<Long, ItemEntity> itemMap = itemService.findItemsByIds(orderIds);
         // TODO: check if found item size and req item size is equal

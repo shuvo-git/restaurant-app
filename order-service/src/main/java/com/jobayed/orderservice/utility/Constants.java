@@ -13,10 +13,10 @@ public class Constants {
 
     public class Topic {
         public static final String CUSTOMER = "customer";
-        public static final String ORDER = "order";
+        public static final String ORDER = "orders";
 
         public class Key {
-            public static final String ORDER = "order_";
+            public static final String ORDER = "orders_";
         }
 
         public class Group {
