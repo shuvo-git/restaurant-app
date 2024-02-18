@@ -28,8 +28,11 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
     private final CustomerService customerService;
     private final ItemService itemService;
+    private final OrderLogService orderLogService;
+
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+
     private final KafkaProducerService kafkaProducerService;
 
 
@@ -54,6 +57,8 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         orderRepository.save(orderEntity);
 
+        orderLogService.addOrderLog(orderEntity, OrderStatus.PENDING,
+                "Order created in "+OrderStatus.PENDING.getName()+" state");
         publishOrder(Order.builder().orderId(orderEntity.getId()).build());
 
         return OrderResponse.Pending.builder()
@@ -68,7 +73,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    protected List<OrderItemEntity> toOrderItemEntityList(List<Long> orderIds, List<OrderRequest.OrderItem> orderItemRequest) {
+    protected List<OrderItemEntity> toOrderItemEntityList(List<Long> orderIds,
+        List<OrderRequest.OrderItem> orderItemRequest) {
         Map<Long, ItemEntity> itemMap = itemService.findItemsByIds(orderIds);
         // TODO: check if found item size and req item size is equal
 
