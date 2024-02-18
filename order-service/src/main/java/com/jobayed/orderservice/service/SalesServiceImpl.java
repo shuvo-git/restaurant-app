@@ -1,5 +1,6 @@
 package com.jobayed.orderservice.service;
 
+import com.jobayed.orderservice.controller.model.response.SalesResponse;
 import com.jobayed.orderservice.entity.OrderEntity;
 import com.jobayed.orderservice.entity.OrderItemEntity;
 import com.jobayed.orderservice.entity.SalesEntity;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -57,5 +59,16 @@ public class SalesServiceImpl implements SalesService {
                     .billStatus(BillStatus.UNPAID)
                     .build());
         }
+    }
+
+    @Override
+    public SalesResponse.TotalSales getTotalSalesByCurrentDate() {
+        Double totalSales = salesRepository.getTotalPriceByStatus(BillStatus.PAID);
+        LocalDate currentDate =  LocalDate.now();
+
+        return SalesResponse.TotalSales.builder()
+                .amount(totalSales)
+                .currentDate(currentDate)
+                .build();
     }
 }
