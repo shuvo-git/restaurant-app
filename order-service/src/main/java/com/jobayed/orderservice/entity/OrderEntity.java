@@ -1,5 +1,6 @@
 package com.jobayed.orderservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jobayed.orderservice.enums.OrderStatus;
 import com.jobayed.orderservice.utility.OrderStatusConverter;
 import jakarta.persistence.*;
@@ -35,6 +36,7 @@ public class OrderEntity extends BaseEntity {
     @Column(name = "order_id", nullable = false)
     String orderId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID")
     CustomerEntity customer;
@@ -43,10 +45,11 @@ public class OrderEntity extends BaseEntity {
     @Column(name = "STATUS")
     OrderStatus orderStatus;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "id")
     private List<OrderItemEntity> orderItems;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "id")
     private List<OrderLogEntity> orderLogs;
-
 }

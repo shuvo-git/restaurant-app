@@ -55,7 +55,7 @@ public class OrderControllerExceptionResolver {
         return new ResponseEntity<>(body, headers, status);
     }
 
-    private String buildErrorCode(final String errorCode) {
+    protected String buildErrorCode(final String errorCode) {
         return new StringBuilder().append(properties.getCode())
                 .append('_')
                 .append(Constants.FeatureCode.ORDER)

@@ -1,17 +1,17 @@
 package com.jobayed.orderservice.controller.endpoint;
 
 import com.jobayed.orderservice.controller.model.request.OrderRequest;
+import com.jobayed.orderservice.controller.model.response.OrderResponse;
+import com.jobayed.orderservice.entity.OrderEntity;
 import com.jobayed.orderservice.service.CustomerService;
 import com.jobayed.orderservice.service.OrderService;
 import jdk.jshell.JShell;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Vantage Labs LLC.
@@ -31,9 +31,11 @@ public class OrderController {
         return ResponseEntity.ok(orderService.createOrder(request));
     }
 
-//    @GetMapping
-//    public ResponseEntity<Page<CustomerDto>> getCustomerList(
-//            @RequestParam Integer page, @RequestParam Integer pageSize) {
-//        return ResponseEntity.ok(customerService.getCustomers(page, pageSize));
-//    }
+    @GetMapping("/{customerId}")
+    public ResponseEntity<Page<OrderResponse.OrderSummary>> getCustomerList(
+            @PathVariable("customerId")Long customerId,
+            @RequestParam Integer page,
+            @RequestParam Integer pageSize) {
+        return ResponseEntity.ok(orderService.getOrdersByCustomerId(customerId, page, pageSize));
+    }
 }

@@ -6,22 +6,32 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+
 public interface OrderResponse {
     @Data
     @Builder
     @FieldDefaults(level = AccessLevel.PRIVATE)
     class Pending {
+        final OrderStatus orderStatus = OrderStatus.PENDING;
         String orderId;
         String message;
-        final OrderStatus orderStatus = OrderStatus.PENDING;
     }
 
     @Data
     @Builder
     @FieldDefaults(level = AccessLevel.PRIVATE)
     class WaitForPayment {
+        final OrderStatus orderStatus = OrderStatus.WAIT_FOR_PAYMENT;
         String orderId;
         String message;
-        final OrderStatus orderStatus = OrderStatus.WAIT_FOR_PAYMENT;
+    }
+
+    interface OrderSummary {
+        String getOrderId();
+        String getCustomerId();
+        String getCustomerName();
+        OrderStatus getOrderStatus();
+        LocalDateTime getOrderedAt();
     }
 }

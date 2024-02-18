@@ -1,11 +1,7 @@
 package com.jobayed.orderservice.entity;
 
-import com.jobayed.orderservice.enums.Status;
-import com.jobayed.orderservice.utility.StatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Table(name = "ORDER_ITEMS")
 @Entity
@@ -14,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class OrderItemEntity extends BaseEntity{
+public class OrderItemEntity extends BaseEntity {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -29,12 +25,15 @@ public class OrderItemEntity extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    OrderEntity order ;
+    OrderEntity order;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    ItemEntity item ;
+    ItemEntity item;
 
     @Column(name = "quantity", nullable = false)
     Integer quantity;
+
+    @Column(name = "total_price", nullable = false)
+    double totalPrice = 0;
 }

@@ -16,6 +16,8 @@ import com.jobayed.orderservice.utility.Utils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -76,6 +78,18 @@ public class OrderServiceImpl implements OrderService {
         kafkaProducerService.sendToKafka(Constants.Topic.ORDER, Constants.Topic.Key.ORDER, order);
     }
 
+    @Override
+    public Page<OrderResponse.OrderSummary> getOrdersByCustomerId(Long customerId, Integer page, Integer pageSize) {
+        CustomerEntity customer = customerService.findCustomerById(customerId)
+                .orElseThrow(CustomerNotFoundException::new);
+        PageRequest pageable = PageRequest.of(page, pageSize);
+        Page<OrderResponse.OrderSummary> orders = orderRepository.findOrdersByCustomer(customer.getId(), pageable);
+
+        log.info("Orders {}", orders);
+
+        return orders;
+    }
+
 
     protected List<OrderItemEntity> toOrderItemEntityList(List<Long> orderIds,
                                                           OrderEntity order,
@@ -85,13 +99,16 @@ public class OrderServiceImpl implements OrderService {
 
         return orderItemRequest.stream()
                 .filter(item -> itemMap.containsKey(item.getItemId()))
-                .map(item -> OrderItemEntity.builder()
-                        .order(order)
-                        .item(itemMap.get(item.getItemId()))
-                        .quantity(item.getQuantity())
-                        .build()
-                ).collect(Collectors.toList());
-
+                .map(item -> {
+                    ItemEntity itemEntity = itemMap.get(item.getItemId());
+                    return OrderItemEntity.builder()
+                            .order(order)
+                            .item(itemEntity)
+                            .quantity(item.getQuantity())
+                            .totalPrice(item.getQuantity() * itemEntity.getPrice())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
 
