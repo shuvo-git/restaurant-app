@@ -2,15 +2,16 @@ package com.jobayed.orderservice.service;
 
 import com.jobayed.orderservice.controller.model.request.OrderRequest;
 import com.jobayed.orderservice.controller.model.response.OrderResponse;
-import com.jobayed.orderservice.entity.CustomerEntity;
-import com.jobayed.orderservice.entity.ItemEntity;
-import com.jobayed.orderservice.entity.OrderEntity;
-import com.jobayed.orderservice.entity.OrderItemEntity;
+import com.jobayed.orderservice.entity.*;
 import com.jobayed.orderservice.entity.dto.Order;
+import com.jobayed.orderservice.enums.BillStatus;
 import com.jobayed.orderservice.enums.OrderStatus;
 import com.jobayed.orderservice.exception.CustomerNotFoundException;
+import com.jobayed.orderservice.exception.NotReadyForPaymentException;
+import com.jobayed.orderservice.exception.OrderNotFoundException;
 import com.jobayed.orderservice.repository.OrderItemRepository;
 import com.jobayed.orderservice.repository.OrderRepository;
+import com.jobayed.orderservice.repository.SalesRepository;
 import com.jobayed.orderservice.utility.Constants;
 import com.jobayed.orderservice.utility.Utils;
 import jakarta.transaction.Transactional;
@@ -35,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final SalesRepository salesRepository;
 
     private final KafkaProducerService kafkaProducerService;
 
@@ -102,6 +104,30 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Optional<OrderEntity> findById(Long id) {
         return orderRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public OrderResponse.Payment payOrderBill(String orderId) {
+        OrderEntity orderEntity = orderRepository.findByOrderId(orderId)
+                .orElseThrow(OrderNotFoundException::new);
+
+        SalesEntity salesEntity = salesRepository.findByOrderAndBillStatus(orderEntity, BillStatus.UNPAID)
+                .orElseThrow(NotReadyForPaymentException::new);
+        salesEntity.setBillStatus(BillStatus.PAID);
+        orderEntity.setOrderStatus(OrderStatus.PLACED);
+
+        orderLogService.addOrderLog(
+                orderEntity,
+                OrderStatus.PLACED,
+                "Order status changed from " + OrderStatus.WAIT_FOR_PAYMENT.getName()
+                        + " to " + OrderStatus.PLACED.getName()
+        );
+
+        return OrderResponse.Payment.builder()
+                .orderId(orderEntity.getOrderId())
+                .message("Bill payment completed. Your order has been placed")
+                .build();
     }
 
     protected List<OrderItemEntity> toOrderItemEntityList(List<Long> orderIds,

@@ -18,4 +18,6 @@ public interface OrderService {
     Page<OrderResponse.OrderSummary> getOrdersByCurrentDate(Integer page, Integer pageSize);
 
     Optional<OrderEntity> findById(Long id);
+
+    OrderResponse.Payment payOrderBill(String orderId);
 }
