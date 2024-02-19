@@ -64,7 +64,7 @@ public class SalesServiceImpl implements SalesService {
     @Override
     public SalesResponse.TotalSales getTotalSalesByCurrentDate() {
         Double totalSales = salesRepository.getTotalPriceByStatus(BillStatus.PAID);
-        LocalDate currentDate =  LocalDate.now();
+        LocalDate currentDate = LocalDate.now();
 
         return SalesResponse.TotalSales.builder()
                 .amount(totalSales)

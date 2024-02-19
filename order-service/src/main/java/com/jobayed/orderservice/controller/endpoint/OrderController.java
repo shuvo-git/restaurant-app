@@ -42,4 +42,10 @@ public class OrderController {
             @RequestParam Integer pageSize) {
         return ResponseEntity.ok(orderService.getOrdersByCurrentDate(page, pageSize));
     }
+
+    @PostMapping("/{orderId}/pay")
+    public ResponseEntity<OrderResponse.Payment> payOrderBill(
+            @PathVariable("orderId") String orderId) {
+        return ResponseEntity.ok(orderService.payOrderBill(orderId));
+    }
 }
