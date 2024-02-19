@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -21,13 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class SalesController {
     private final SalesService salesService;
 
-//    @GetMapping("/{customerId}")
-//    public ResponseEntity<Page<OrderResponse.OrderSummary>> getOrderListByCustomerId(
-//            @PathVariable("customerId") Long customerId,
-//            @RequestParam Integer page,
-//            @RequestParam Integer pageSize) {
-//        return ResponseEntity.ok(orderService.getOrdersByCustomerId(customerId, page, pageSize));
-//    }
+    @GetMapping("/max")
+    public ResponseEntity<SalesResponse.MaxSaleDay> getOrderListByCustomerId(
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        return ResponseEntity.ok(salesService.getMaxSaleDate(startDate, endDate));
+    }
 
     @GetMapping("/today")
     public ResponseEntity<SalesResponse.TotalSales> getOrderListByCurrentDate() {

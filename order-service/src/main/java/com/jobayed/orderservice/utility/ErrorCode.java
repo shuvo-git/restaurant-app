@@ -18,6 +18,7 @@ public enum ErrorCode {
     ITEM_NOT_AVAILABLE("003", "Item not available"),
     ORDER_NOT_FOUND("004", "Order not found"),
     NOT_READY_FOR_PAYMENT("005", "Not ready for payment"),
+    INVALID_DATE_FORMAT_EXCEPTION("006", "Invalid date format exception"),
     INTERNAL_SERVER_ERROR("500", "Internal server error");
 
     @Getter

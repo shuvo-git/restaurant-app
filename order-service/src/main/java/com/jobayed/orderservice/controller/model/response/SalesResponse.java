@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 public interface SalesResponse {
+    interface MaxSaleDay {
+        LocalDate getDate();
+
+        double getAmount();
+    }
+
     @Data
     @Builder
     @NoArgsConstructor
