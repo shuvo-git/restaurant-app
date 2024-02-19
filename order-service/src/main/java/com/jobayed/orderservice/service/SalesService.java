@@ -7,4 +7,6 @@ public interface SalesService {
     void prepareOrderBill(Order order);
 
     SalesResponse.TotalSales getTotalSalesByCurrentDate();
+
+    SalesResponse.MaxSaleDay getMaxSaleDate(String startDate, String endDate);
 }

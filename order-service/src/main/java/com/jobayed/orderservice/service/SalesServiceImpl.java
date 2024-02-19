@@ -7,6 +7,7 @@ import com.jobayed.orderservice.entity.SalesEntity;
 import com.jobayed.orderservice.entity.dto.Order;
 import com.jobayed.orderservice.enums.BillStatus;
 import com.jobayed.orderservice.enums.OrderStatus;
+import com.jobayed.orderservice.exception.InvalidDateFormatException;
 import com.jobayed.orderservice.exception.OrderNotFoundException;
 import com.jobayed.orderservice.repository.SalesRepository;
 import com.jobayed.orderservice.utility.Constants;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -70,5 +72,20 @@ public class SalesServiceImpl implements SalesService {
                 .amount(totalSales)
                 .currentDate(currentDate)
                 .build();
+    }
+
+    @Override
+    public SalesResponse.MaxSaleDay getMaxSaleDate(String startDate, String endDate) {
+        try {
+            List<SalesResponse.MaxSaleDay> sales = salesRepository.getMaxSaleDay(startDate, endDate,
+                    BillStatus.PAID.getValue());
+            if (CollectionUtils.isEmpty(sales)) {
+                return null;
+            }
+            return sales.get(0);
+        } catch (Exception e) {
+            throw new InvalidDateFormatException();
+        }
+
     }
 }
